@@ -10,10 +10,68 @@
   </head>
   <body>
     <div id="app">
-      <h1>Product goes here</h1>
+      <div class="nav-bar"></div>
+      <div class="cart">Cart {{ cart }}</div>
+      <div class="product-display">
+        <div class="product-container">
+          <div class="product-image">
+            <img v-bind:src="image" alt="" />
+            <!-- Attribute bind(속성바인드)는 v-bind를 이용 
+              src에 v-bind를 걸어서 main.js의 image data를 가져옴
+              v-bind: Dynamically bind an attribute to an expression 
+          여기서 말하는 attribute는 src를 말하고 expression은 image를 말함
+        v-bind는 생략하고 : 만 사용할 수 있음
+        v-bind로 사용할 수 있는 attrib은 다양함 (:src, :alt, :href, :class, :style, :disabled 등)-->
+          </div>
+          <div class="product-info">
+            <h1>{{title}}</h1>
+            <!-- {{ }} 이 안에는 다양한 것을 할 수 있음 {{ firstName + '' + lasName}}이라던지, {{ clicked ? true : false }}와 같이 삼항식도 가능하고 {{ message.method() }}method가 올 수도 있음-->
+
+            <p v-if="inStock">In Stock</p>
+            <!-- <p v-if="inventory > 10">In Stock</p> -->
+            <!-- <p v-else-if="inventory <= 10 && inventory > 0">Almost Sold Out!</p> -->
+            <p v-else>Out of Stock</p>
+            <!-- if inStock이 true 이면 In stock을 보여주고 아니면 v-else를 보여줌. 반드시 v-if와 v-else를 같이 쓸 필요는 없고 v-if만 쓸수도 있음 -->
+            <!-- <p v-show="inStock">In Stock</p> -->
+            <!-- v-show는 element의 보이고 안보이고를 toggling 해줌 -->
+            <ul>
+              <li v-for="detail in details">{{ detail }}</li>
+              <!-- v-for은 details 배열에 들어있는 요소들을 하나씩 꺼내줌 -->
+            </ul>
+            <div
+              v-for="(variant, index) in variants"
+              :key="variant.id"
+              @mouseover="updateVariant(index)"
+              class="color-circle"
+              :style="{backgroundColor: variant.color }"
+            >
+              <!-- updateImage라는 method가 variant의 image를 받음 -->
+              <!-- {{ variant.color }} -->
+            </div>
+            <!-- <button class="button" v-on:click="cart += 1">Add to Cart</button> -->
+            <!-- 이렇게 inline으로 event를 작성할 수도 있지만 조금 더 복잡한 logic들을 위해서는 method로 작성해주는 것이좋음  -->
+            <button
+              class="button"
+              :class="{disabledButton : !inStock}"
+              :disabled="!inStock"
+              v-on:click="addToCart"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Import Js -->
+    <!-- Import App -->
+    <!-- 단순히 JS를 import하는 것이 아닌 전체 Vue app을 import한 것 -->
     <script src="./main.js"></script>
+
+    <!-- Mount App -->
+    <script>
+      const mountedApp = app.mount("#app");
+      /* app은 위에서 import해온 main.js의 app이고 mount라는 method의 인자로 
+      Dom selector인 div에서 id로 정해준 app을 연결해줌 */
+    </script>
   </body>
 </html>
